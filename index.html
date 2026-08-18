@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Yussion / 走遍世界</title>
+  <style>
+    :root{
+      --void:#f4f7fb;
+      --void-2:#eef3fa;
+      --surface:#ffffff;
+      --surface-2:#eef2f8;
+      --ink:#0e1726;
+      --ink-soft:#33425a;
+      --muted:#5b6b7e;
+      --dim:#94a3b4;
+      --acid:#ff7a59;          /* 主强调：暖珊瑚 */
+      --violet:#7b5cff;        /* 科技紫 */
+      --cyan:#19c2c9;          /* 科技青 */
+      --line:rgba(14,23,38,.12);
+      --soft-line:rgba(14,23,38,.07);
+      --grad:linear-gradient(115deg,#ff7a59 0%,#ff5fa2 32%,#7b5cff 66%,#19c2c9 100%);
+      --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Sans GB","PingFang SC",Arial,sans-serif;
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+      --ease:cubic-bezier(.22,1,.36,1);
+      --spring:cubic-bezier(.34,1.4,.5,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--void);color:var(--ink);font-family:var(--sans);font-weight:380;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--acid);outline-offset:4px;border-radius:8px}
+    .skip{position:absolute;left:16px;top:-70px;padding:12px 16px;background:var(--acid);color:#fff;z-index:90;font-weight:700;border-radius:10px}
+    .skip:focus{top:16px}
+
+    /* ===== 背景：极光 + 网格 + 颗粒 ===== */
+    .bg-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
+      radial-gradient(120% 90% at 100% 0%,#eaf1ff 0%,transparent 55%),
+      radial-gradient(120% 90% at 0% 100%,#fff1ea 0%,transparent 55%),
+      linear-gradient(180deg,var(--void) 0%,var(--void-2) 100%)}
+    .aurora{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;mix-blend-mode:multiply;will-change:transform}
+    .aurora.a1{width:54vw;height:54vw;left:-12vw;top:-14vw;background:radial-gradient(circle,#ffd0bf,transparent 62%);animation:drift1 22s var(--ease) infinite alternate}
+    .aurora.a2{width:48vw;height:48vw;right:-10vw;top:8vw;background:radial-gradient(circle,#cdbcff,transparent 62%);animation:drift2 26s var(--ease) infinite alternate}
+    .aurora.a3{width:46vw;height:46vw;left:24vw;bottom:-18vw;background:radial-gradient(circle,#bff0f2,transparent 62%);animation:drift3 30s var(--ease) infinite alternate}
+    @keyframes drift1{to{transform:translate(8vw,6vw) scale(1.12)}}
+    @keyframes drift2{to{transform:translate(-7vw,4vw) scale(1.08)}}
+    @keyframes drift3{to{transform:translate(5vw,-6vw) scale(1.14)}}
+    .bg-grid{position:absolute;inset:0;background-image:
+      linear-gradient(rgba(14,23,38,.035) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(14,23,38,.035) 1px,transparent 1px);
+      background-size:64px 64px;mask-image:radial-gradient(circle at 50% 40%,#000 30%,transparent 78%)}
+    .bg-grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+    /* ===== 滚动进度条 ===== */
+    .scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:80;background:var(--grad);background-size:200% 100%;box-shadow:0 0 14px rgba(123,92,255,.5);transition:width .12s linear}
+
+    /* ===== 指针光晕 ===== */
+    .cursor-glow{position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;z-index:2;pointer-events:none;opacity:0;transition:opacity .4s ease;
+      background:radial-gradient(circle,rgba(255,122,89,.16),rgba(123,92,255,.12) 38%,transparent 66%);will-change:transform}
+
+    .shell{position:relative;z-index:5;width:min(1440px,100%);margin:auto;padding:0 38px}
+
+    /* ===== 导航 ===== */
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:5}
+    .nav-pill{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:34px;padding:13px 26px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 34px rgba(14,23,38,.08);animation:navIn .9s var(--ease) both}
+    @keyframes navIn{from{opacity:0;transform:translate(-50%,-18px)}to{opacity:1;transform:translate(-50%,0)}}
+    .brand{font:700 12px/1 var(--mono);letter-spacing:.08em;white-space:nowrap}
+    .brand-mark{display:inline-block;margin-right:9px;background:var(--grad);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;font-size:15px;animation:hue 8s linear infinite}
+    @keyframes hue{to{background-position:200% 0}}
+    .nav-links{display:flex;gap:24px;font:10px/1 var(--mono);letter-spacing:.14em;color:var(--muted)}
+    .nav-links a{position:relative;transition:color .3s ease;padding:4px 0}
+    .nav-links a:after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--grad);background-size:200% 100%;transition:width .35s var(--ease)}
+    .nav-links a:hover{color:var(--ink)}
+    .nav-links a:hover:after{width:100%}
+
+    /* ===== HERO ===== */
+    .hero{position:relative;min-height:calc(100svh - 60px);display:flex;justify-content:center;text-align:center;padding:84px 0 56px;overflow:hidden;isolation:isolate}
+    .cinema-layer{position:absolute;inset:-92px -38px -46px;z-index:0;overflow:hidden;pointer-events:none;background:var(--void)}
+    .cinema-shot{position:absolute;inset:0;opacity:0;background:center/cover no-repeat;transform:scale(1.06);transition:opacity 1.4s var(--ease),transform 11s linear;will-change:opacity,transform}
+    .cinema-shot:nth-child(1){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.5) 46%,rgba(244,247,251,.14) 100%),url('assets/photos/home/card-a-bora-bora.jpg')}
+    .cinema-shot:nth-child(2){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/home/card-c-sunset-sailboat.jpg')}
+    .cinema-shot:nth-child(3){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/home/card-d-seaplane.jpg')}
+    .cinema-shot:nth-child(4){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/home/card-d-seaplane.jpg')}
+    .cinema-shot.is-active{opacity:.62;transform:scale(1.01)}
+    .cinema-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 64% at 50% 44%,transparent 4%,rgba(244,247,251,.1) 64%,rgba(244,247,251,.72) 100%)}
+    .hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 56% 48% at 50% 46%,rgba(255,255,255,.82),rgba(255,255,255,.2) 46%,transparent 72%)}
+    .hero-copy{position:relative;z-index:3;align-self:center;max-width:840px;padding:0 20px}
+    .journey-badge{display:inline-flex;align-items:center;gap:9px;margin-bottom:24px;padding:9px 15px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(14,23,38,.08),inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      color:var(--ink);font:10px/1 var(--mono);letter-spacing:.12em;animation:badgeIn 1s .15s var(--ease) both}
+    @keyframes badgeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .journey-badge i{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 14px rgba(255,122,89,.7);animation:pulse 2.4s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+    .kicker{display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 22px;font:10px/1.25 var(--mono);letter-spacing:.16em;color:var(--muted);animation:fadeUp 1s .25s var(--ease) both}
+    .kicker:before{content:"";width:18px;height:1px;background:var(--acid)}
+    h1{margin:0;font-size:clamp(72px,10.2vw,166px);line-height:.8;letter-spacing:-.07em;font-weight:780}
+    .hero-title-quiet{display:block;color:var(--ink);font-weight:320;letter-spacing:-.09em;animation:fadeUp 1s .3s var(--ease) both}
+    .hero-title-accent{display:block;font-weight:720;background:var(--grad);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:fadeUp 1s .4s var(--ease) both,hue 9s linear infinite}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(26px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+    .hero-summary{margin:32px auto 0;max-width:480px;color:var(--ink-soft);font-size:16px;line-height:1.75;animation:fadeUp 1s .5s var(--ease) both}
+    .scene-switcher{position:relative;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:38px auto 0;padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:max-content;max-width:100%;animation:fadeUp 1s .6s var(--ease) both}
+    .scene-switcher button{position:relative;z-index:2;appearance:none;border:0;background:transparent;padding:9px 16px;border-radius:999px;color:var(--muted);font:10px/1 var(--mono);letter-spacing:.12em;cursor:pointer;transition:color .3s ease}
+    .scene-switcher button:hover{color:var(--ink)}
+    .scene-switcher button.is-active{color:#fff}
+    .scene-indicator{position:absolute;z-index:1;top:6px;bottom:6px;left:6px;width:0;border-radius:999px;background:var(--grad);background-size:200% 100%;box-shadow:0 6px 20px rgba(123,92,255,.35);transition:left .45s var(--spring),width .45s var(--spring)}
+    .hero-foot{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:36px;font:10px/1 var(--mono);letter-spacing:.13em;color:var(--muted);animation:fadeUp 1s .7s var(--ease) both}
+    .hero-foot span{display:flex;align-items:center;gap:8px}
+    .hero-foot b{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 16px rgba(255,122,89,.6)}
+    .hero-foot i{height:13px;width:1px;background:var(--line)}
+    .hero-foot:after{content:'PRIVATE PHOTO ARCHIVE';margin-left:14px;color:var(--dim);letter-spacing:.15em}
+
+    /* ===== 滚动分层条 ===== */
+    .rail{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;font:10px/1 var(--mono);letter-spacing:.15em;color:var(--muted);margin-top:8px}
+    .rail strong{font-weight:500;color:var(--ink)}
+    .rail-dot{width:7px;height:7px;border-radius:50%;background:var(--acid);display:inline-block;margin-right:8px;box-shadow:0 0 12px rgba(255,122,89,.6)}
+
+    /* ===== 宣言 ===== */
+    .statement{padding:clamp(90px,15vw,190px) 8.5% clamp(86px,12vw,158px);max-width:1120px}
+    .statement p{margin:0;font-size:clamp(31px,5.1vw,75px);font-weight:300;letter-spacing:-.055em;line-height:1.06;text-wrap:balance;color:var(--ink)}
+    .statement em{font-style:normal;font-weight:680;background:var(--grad);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hue 9s linear infinite}
+
+    /* ===== 地图区 ===== */
+    .maps{padding-bottom:clamp(82px,12vw,160px)}
+    .maps-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:26px}
+    .maps-head h2{margin:10px 0 0;font-size:clamp(40px,5vw,72px);letter-spacing:-.06em;line-height:.9;font-weight:740}
+    .map-meta{font:10px/1.25 var(--mono);letter-spacing:.16em;color:var(--muted)}
+    .map-stack{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+    .map-panel{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:0 16px 46px rgba(14,23,38,.09);transition:transform .55s var(--ease),box-shadow .55s var(--ease),border-color .55s ease}
+    .map-panel:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(14,23,38,.14);border-color:rgba(123,92,255,.4)}
+    .map-panel img{display:block;width:100%;height:100%;object-fit:cover}
+    .world-panel{min-height:460px}
+    .china-panel{min-height:460px}
+    .china-panel img{object-fit:contain;background:#e9f0ee;object-position:50% 50%}
+    .map-caption{position:absolute;left:0;right:0;bottom:0;padding:25px;display:flex;justify-content:space-between;align-items:end;gap:14px;background:linear-gradient(transparent,rgba(14,23,38,.86) 70%)}
+    .map-caption h3{margin:0;font-size:23px;line-height:1;letter-spacing:-.04em;color:#fff}
+    .map-caption span{font:10px/1.35 var(--mono);letter-spacing:.12em;color:#dfe7ef;text-align:right}
+
+    /* ===== 记忆卡片 ===== */
+    .memory{display:grid;grid-template-columns:.9fr 1.1fr;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-bottom:28px;position:relative;box-shadow:0 16px 46px rgba(14,23,38,.09);transition:transform .6s var(--ease),box-shadow .6s var(--ease),border-color .6s ease}
+    .memory:hover{transform:translateY(-8px);box-shadow:0 30px 70px rgba(14,23,38,.16);border-color:rgba(255,122,89,.55)}
+    .memory:before{content:"";position:absolute;inset:0;z-index:4;border-radius:22px;pointer-events:none;opacity:0;transition:opacity .5s ease;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6),0 0 36px rgba(123,92,255,.25);background:linear-gradient(120deg,rgba(255,122,89,.12),rgba(123,92,255,.12),rgba(25,194,201,.12))}
+    .memory:hover:before{opacity:1}
+    .memory-image{min-height:430px;position:relative;background:center/cover no-repeat;overflow:hidden}
+    .memory-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 38%,rgba(14,23,38,.62));transition:background .6s ease}
+    .memory:hover .memory-image:after{background:linear-gradient(90deg,transparent 30%,rgba(14,23,38,.42))}
+    .memory-shine{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 48%,transparent 66%);transform:translateX(-120%);opacity:0}
+    .memory:hover .memory-shine{opacity:1;animation:shine 1.1s var(--ease)}
+    @keyframes shine{to{transform:translateX(120%)}}
+    .memory-copy{padding:clamp(36px,6vw,84px);display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:3}
+    .memory-copy h2{margin:0;font-size:clamp(38px,4.4vw,60px);letter-spacing:-.05em;line-height:.95;font-weight:740;color:var(--ink)}
+    .memory-copy p{margin:18px 0 0;color:var(--ink-soft);font-size:15px;line-height:1.7;max-width:42ch}
+    .memory-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font:9px/1 var(--mono);letter-spacing:.13em;color:var(--muted)}
+    .memory-meta span:first-child{color:var(--acid)}
+    .memory-arrow{position:absolute;top:clamp(36px,6vw,84px);right:clamp(36px,6vw,84px);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.6);transition:transform .5s var(--spring),background .4s ease,color .4s ease;z-index:5}
+    .memory:hover .memory-arrow{transform:rotate(-45deg) scale(1.08);background:var(--grad);color:#fff;border-color:transparent}
+    .memory-image{background-image:url('assets/photos/home/tokyo-share-photo.jpg')}
+    .namibia-memory .memory-image{background-image:url('assets/photos/namibia/260a4c1248aefeb8d698fbcff566eb25.jpg');background-position:center}
+    .tahiti-memory .memory-image{background-image:url('assets/photos/tahiti/aerial-lagoon.jpg');background-position:center}
+    .mauritius-memory .memory-image{background-image:url('assets/photos/mauritius/acc333d09c84d0be58beb08533612b07.jpg');background-position:center}
+
+    /* ===== 页脚 ===== */
+    .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:34px 0 54px;border-top:1px solid var(--line);font:10px/1 var(--mono);letter-spacing:.14em;color:var(--dim)}
+
+    /* ===== 滚动揭示 ===== */
+    .reveal{opacity:0;transform:translateY(34px);filter:blur(10px);transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease);transition-delay:calc(var(--d,0)*90ms)}
+    .reveal.is-visible{opacity:1;transform:none;filter:none}
+
+    @media(max-width:900px){
+      .shell{padding:0 22px}
+      .nav-pill{gap:20px;padding:11px 18px;top:12px}
+      .nav-links{gap:16px}
+      .cinema-layer{inset:-88px -38px -36px}
+      .cinema-shot.is-active{opacity:.5}
+      .hero-foot:after{display:none}
+      .memory{grid-template-columns:1fr}
+      .memory-image{min-height:300px}
+      .memory-image:after{background:linear-gradient(0deg,rgba(14,23,38,.6),transparent 62%)}
+      .map-stack{grid-template-columns:1fr}
+      .memory-arrow{display:none}
+    }
+    @media(max-width:620px){
+      .shell{padding:0 16px}
+      .nav-pill{padding:10px 14px;gap:14px}
+      .nav-links{display:none}
+      .cinema-layer{inset:-74px -18px -36px}
+      .cinema-shot.is-active{opacity:.42}
+      .hero{min-height:calc(100svh - 50px);padding-top:64px}
+      .hero-summary{font-size:14px}
+      .scene-switcher{margin-top:30px}
+      .scene-switcher button{font-size:9px;padding:8px 11px}
+      .memory-image:after{background:linear-gradient(0deg,rgba(14,23,38,.55),transparent 60%)}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *{animation:none!important}
+      .aurora,.bg-grain,.cursor-glow{display:none}
+      .cinema-shot{display:none;transition:none}
+      .cinema-shot:first-child{display:block;opacity:.22;transform:none}
+      .reveal{opacity:1;transform:none;filter:none;transition:none}
+      .scene-indicator{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-field" aria-hidden="true">
+    <span class="aurora a1"></span><span class="aurora a2"></span><span class="aurora a3"></span>
+    <span class="bg-grid"></span>
+  </div>
+  <div class="bg-grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳至正文</a>
+
+  <nav class="nav-pill" aria-label="页面导航">
+    <a class="brand" href="#top"><span class="brand-mark">✦</span>YUSSION / 走遍世界</a>
+    <nav class="nav-links"><a href="#maps">足迹地图</a><a href="#memory">旅行记忆</a><a href="#about">关于这份档案</a></nav>
+  </nav>
+
+  <div class="shell">
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="cinema-layer" aria-hidden="true">
+          <span class="cinema-shot is-active"></span>
+          <span class="cinema-shot"></span>
+          <span class="cinema-shot"></span>
+          <span class="cinema-shot"></span>
+          <span class="cinema-vignette"></span>
+        </div>
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <div class="journey-badge"><i></i>22 PLACES, ONE PRIVATE ARCHIVE</div>
+          <p class="kicker">A PERSONAL ARCHIVE OF DISTANCE</p>
+          <h1><span class="hero-title-quiet">走遍</span><span class="hero-title-accent">世界</span></h1>
+          <p class="hero-summary">把看过的山海、城市与夜空，留在一份只分享给朋友的旅行档案里。</p>
+          <div class="scene-switcher" aria-label="切换首页旅行影像">
+            <button class="is-active" type="button">TURQUOISE</button>
+            <button type="button">GOLDEN HOUR</button>
+            <button type="button">ISLAND HOP</button>
+            <button type="button">SOUTHERN LINE</button>
+            <span class="scene-indicator" aria-hidden="true"></span>
+          </div>
+          <div class="hero-foot"><span><b></b>22 places unlocked</span><i></i><span>2022 → now</span></div>
+        </div>
+      </section>
+
+      <div class="rail reveal"><span><i class="rail-dot"></i>Private travel archive</span><strong>YUSSION · 2022 / NOW</strong><span>SCROLL TO UNFOLD</span></div>
+
+      <section class="statement reveal"><p>旅行不是收集坐标。是让每一次远行，都在记忆里留下<em>自己的光。</em></p></section>
+
+      <section class="maps reveal" id="maps">
+        <div class="maps-head"><div><h2>足迹，正在延展。</h2></div><span class="map-meta">国家与城市，均以实际到访记录标注</span></div>
+        <div class="map-stack">
+          <article class="map-panel world-panel"><img src="assets/maps/world-map-visited.png" alt="已到访国家和城市的世界地图"><div class="map-caption"><h3>世界地图</h3><span>COUNTRIES / REGIONS<br>22 PLACES UNLOCKED</span></div></article>
+          <article class="map-panel china-panel"><img src="assets/maps/china-provinces-visited.png" alt="按到访城市和省份标注的中国地图"><div class="map-caption"><h3>国内深度游</h3><span>CHINA / PROVINCIAL<br>CITY ARCHIVE</span></div></article>
+        </div>
+      </section>
+
+      <a class="memory reveal" id="memory" href="分页/japan.html" aria-label="打开日本旅行档案">
+        <div class="memory-image" role="img" aria-label="东京夜晚街头"></div>
+        <span class="memory-shine" aria-hidden="true"></span>
+        <span class="memory-arrow" aria-hidden="true">↗</span>
+        <div class="memory-copy"><div><h2>Japan</h2><p>从东京雨夜的街头开始，这一页留给在日本走过的每一段路。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>JAPAN / TOKYO</span><span>OPEN ARCHIVE</span></div></div>
+      </a>
+
+      <a class="memory namibia-memory reveal" href="分页/namibia.html" aria-label="打开纳米比亚旅行档案">
+        <div class="memory-image" role="img" aria-label="纳米比亚红色沙丘"></div>
+        <span class="memory-shine" aria-hidden="true"></span>
+        <span class="memory-arrow" aria-hidden="true">↗</span>
+        <div class="memory-copy"><div><h2>Namibia</h2><p>从夜空下的箭袋树，到红沙丘与大西洋，这一页留给最辽阔的一段旅程。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>NAMIBIA / DESERT</span><span>OPEN ARCHIVE</span></div></div>
+      </a>
+
+      <a class="memory tahiti-memory reveal" href="分页/tahiti.html" aria-label="打开 Tahiti 旅行档案">
+        <div class="memory-image" role="img" aria-label="法属波利尼西亚泻湖"></div>
+        <span class="memory-shine" aria-hidden="true"></span>
+        <span class="memory-arrow" aria-hidden="true">↗</span>
+        <div class="memory-copy"><div><h2>Tahiti</h2><p>泻湖、远山和水上屋。这一页留给法属波利尼西亚最接近蓝色的一段旅程。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>FRENCH POLYNESIA</span><span>OPEN ARCHIVE</span></div></div>
+      </a>
+
+      <a class="memory mauritius-memory reveal" href="分页/mauritius.html" aria-label="打开毛里求斯旅行档案">
+        <div class="memory-image" role="img" aria-label="毛里求斯海岸与泻湖"></div>
+        <span class="memory-shine" aria-hidden="true"></span>
+        <span class="memory-arrow" aria-hidden="true">↗</span>
+        <div class="memory-copy"><div><h2>Mauritius</h2><p>礁湖、山脊与印度洋的风。这一页留给毛里求斯不断变色的海岛日常。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>MAURITIUS / ISLAND</span><span>OPEN ARCHIVE</span></div></div>
+      </a>
+    </main>
+
+    <footer class="footer" id="about"><span>YUSSION / A PRIVATE MAP FOR FRIENDS</span><span>MADE FROM REAL JOURNEYS</span></footer>
+  </div>
+
+  <script>
+    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* 滚动揭示（带错峰延迟） */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){ entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold:.14 });
+    document.querySelectorAll('.reveal').forEach((el, i) => { el.style.setProperty('--d', i % 4); observer.observe(el); });
+
+    /* 滚动进度条 */
+    const progress = document.querySelector('.scroll-progress');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    };
+    document.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+
+    /* 影院背景交叉淡入 */
+    const shots = [...document.querySelectorAll('.cinema-shot')];
+    const sceneButtons = [...document.querySelectorAll('.scene-switcher button')];
+    const indicator = document.querySelector('.scene-indicator');
+    const moveIndicator = (btn) => {
+      if(!indicator || !btn) return;
+      indicator.style.left = btn.offsetLeft + 'px';
+      indicator.style.width = btn.offsetWidth + 'px';
+    };
+    if(shots.length > 1 && !prefersReduced){
+      let active = 0, timer;
+      const setCinema = (i) => {
+        if(i === active) return;
+        shots[active].classList.remove('is-active');
+        sceneButtons[active].classList.remove('is-active');
+        active = i;
+        shots[active].classList.add('is-active');
+        sceneButtons[active].classList.add('is-active');
+        moveIndicator(sceneButtons[active]);
+      };
+      const advance = () => setCinema((active + 1) % shots.length);
+      const start = () => { clearInterval(timer); timer = setInterval(advance, 8500); };
+      const stop = () => clearInterval(timer);
+      sceneButtons.forEach((b, i) => b.addEventListener('click', () => { setCinema(i); start(); }));
+      start();
+      document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+      window.addEventListener('load', () => moveIndicator(sceneButtons[active]));
+      moveIndicator(sceneButtons[active]);
+    } else if(indicator && sceneButtons[0]) {
+      moveIndicator(sceneButtons[0]);
+    }
+
+    /* 指针光晕（仅精确指针 + 非减弱动效） */
+    const glow = document.querySelector('.cursor-glow');
+    if(glow && matchMedia('(pointer:fine)').matches && !prefersReduced){
+      let gx = innerWidth/2, gy = innerHeight/2, cx = gx, cy = gy, raf;
+      const loop = () => { cx += (gx - cx) * .12; cy += (gy - cy) * .12; glow.style.transform = `translate(${cx}px,${cy}px)`; raf = requestAnimationFrame(loop); };
+      addEventListener('pointermove', e => { gx = e.clientX; gy = e.clientY; glow.style.opacity = '1'; });
+      addEventListener('pointerleave', () => glow.style.opacity = '0');
+      loop();
+    }
+  </script>
+</body>
+</html>
