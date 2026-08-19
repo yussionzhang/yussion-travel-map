@@ -82,9 +82,7 @@
     .cinema-layer{position:absolute;inset:-92px -38px -46px;z-index:0;overflow:hidden;pointer-events:none;background:var(--void)}
     .cinema-shot{position:absolute;inset:0;opacity:0;background:center/cover no-repeat;transform:scale(1.06);transition:opacity 1.4s var(--ease),transform 11s linear;will-change:opacity,transform}
     .cinema-shot:nth-child(1){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.5) 46%,rgba(244,247,251,.14) 100%),url('assets/photos/namibia/95b4ac65a21b3bcdaaa3c6c886ecde9c.jpg')}
-    .cinema-shot:nth-child(2){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/tahiti/aerial-lagoon.jpg')}
-    .cinema-shot:nth-child(3){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/nordic/0f4a4184f4a092f9ad672f7d5c893054.jpg')}
-    .cinema-shot:nth-child(4){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url('assets/photos/japan/izu/abac7ff589a356724f872411533fd5d0.jpg')}
+    .cinema-shot:nth-child(2),.cinema-shot:nth-child(3),.cinema-shot:nth-child(4){background-image:linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%)}
     .cinema-shot.is-active{opacity:.62;transform:scale(1.01)}
     .cinema-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 64% at 50% 44%,transparent 4%,rgba(244,247,251,.1) 64%,rgba(244,247,251,.72) 100%)}
     .hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 56% 48% at 50% 46%,rgba(255,255,255,.82),rgba(255,255,255,.2) 46%,transparent 72%)}
@@ -227,9 +225,9 @@
       <section class="hero" id="top">
         <div class="cinema-layer" aria-hidden="true">
           <span class="cinema-shot is-active"></span>
-          <span class="cinema-shot"></span>
-          <span class="cinema-shot"></span>
-          <span class="cinema-shot"></span>
+          <span class="cinema-shot" data-bg="assets/photos/tahiti/aerial-lagoon.jpg"></span>
+          <span class="cinema-shot" data-bg="assets/photos/nordic/0f4a4184f4a092f9ad672f7d5c893054.jpg"></span>
+          <span class="cinema-shot" data-bg="assets/photos/japan/izu/abac7ff589a356724f872411533fd5d0.jpg"></span>
           <span class="cinema-vignette"></span>
         </div>
         <div class="hero-glow" aria-hidden="true"></div>
@@ -348,10 +346,20 @@
       let active = 0, timer;
       const setCinema = (i) => {
         if(i === active) return;
+        const shot = shots[i];
+        if(shot.dataset.bg && !shot.dataset.loaded){
+          const image = new Image();
+          image.onload = () => {
+            shot.style.backgroundImage = `linear-gradient(100deg,rgba(244,247,251,.94) 0%,rgba(244,247,251,.48) 46%,rgba(244,247,251,.12) 100%),url("${shot.dataset.bg}")`;
+            shot.dataset.loaded = 'true';
+            shot.classList.add('is-active');
+          };
+          image.src = shot.dataset.bg;
+        }
         shots[active].classList.remove('is-active');
         sceneButtons[active].classList.remove('is-active');
         active = i;
-        shots[active].classList.add('is-active');
+        if(!shot.dataset.bg || shot.dataset.loaded) shot.classList.add('is-active');
         sceneButtons[active].classList.add('is-active');
         moveIndicator(sceneButtons[active]);
       };
