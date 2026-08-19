@@ -155,13 +155,7 @@
     .memory-meta span:first-child{color:var(--acid)}
     .memory-arrow{position:absolute;top:clamp(36px,6vw,84px);right:clamp(36px,6vw,84px);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.6);transition:transform .5s var(--spring),background .4s ease,color .4s ease;z-index:5}
     .memory:hover .memory-arrow{transform:rotate(-45deg) scale(1.08);background:var(--grad);color:#fff;border-color:transparent}
-    .memory-image{background-image:url('assets/photos/home/tokyo-share-photo.jpg')}
-    .namibia-memory .memory-image{background-image:url('assets/photos/namibia/260a4c1248aefeb8d698fbcff566eb25.jpg');background-position:center}
-    .tahiti-memory .memory-image{background-image:url('assets/photos/tahiti/aerial-lagoon.jpg');background-position:center}
-    .mauritius-memory .memory-image{background-image:url('assets/photos/mauritius/acc333d09c84d0be58beb08533612b07.jpg');background-position:center}
-    .nordic-memory .memory-image{background-image:url('assets/photos/nordic/0f4a4184f4a092f9ad672f7d5c893054.jpg');background-position:center}
-    .maldives-memory .memory-image{background-image:url('assets/photos/Maldives/4a243c43b2e0bccc3e27ccf9dec47698.jpg');background-position:center}
-    .next-memory .memory-image{background-image:url('assets/photos/next/australia-twelve-apostles.jpg');background-position:center}
+    .memory-image{background-position:center;background-size:cover;background-repeat:no-repeat}
 
     /* ===== 页脚 ===== */
     .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:34px 0 54px;border-top:1px solid var(--line);font:11px/1 var(--mono);letter-spacing:.11em;color:var(--dim)}
@@ -260,49 +254,49 @@
       </section>
 
       <a class="memory reveal" id="memory" href="分页/japan.html" aria-label="打开日本旅行档案">
-        <div class="memory-image" role="img" aria-label="东京夜晚街头"></div>
+        <div class="memory-image" data-bg="assets/photos/home/tokyo-share-photo.jpg" role="img" aria-label="东京夜晚街头"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Japan</h2><p>从东京雨夜的街头开始，这一页留给在日本走过的每一段路。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>JAPAN / TOKYO</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory namibia-memory reveal" href="分页/namibia.html" aria-label="打开纳米比亚旅行档案">
-        <div class="memory-image" role="img" aria-label="纳米比亚红色沙丘"></div>
+        <div class="memory-image" data-bg="assets/photos/namibia/260a4c1248aefeb8d698fbcff566eb25.jpg" role="img" aria-label="纳米比亚红色沙丘"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Namibia</h2><p>从夜空下的箭袋树，到红沙丘与大西洋，这一页留给最辽阔的一段旅程。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>NAMIBIA / DESERT</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory tahiti-memory reveal" href="分页/tahiti.html" aria-label="打开 Tahiti 旅行档案">
-        <div class="memory-image" role="img" aria-label="法属波利尼西亚泻湖"></div>
+        <div class="memory-image" data-bg="assets/photos/tahiti/aerial-lagoon.jpg" role="img" aria-label="法属波利尼西亚泻湖"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Tahiti</h2><p>泻湖、远山和水上屋。这一页留给法属波利尼西亚最接近蓝色的一段旅程。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>FRENCH POLYNESIA</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory mauritius-memory reveal" href="分页/mauritius.html" aria-label="打开毛里求斯旅行档案">
-        <div class="memory-image" role="img" aria-label="毛里求斯海岸与泻湖"></div>
+        <div class="memory-image" data-bg="assets/photos/mauritius/acc333d09c84d0be58beb08533612b07.jpg" role="img" aria-label="毛里求斯海岸与泻湖"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Mauritius</h2><p>礁湖、山脊与印度洋的风。这一页留给毛里求斯不断变色的海岛日常。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>MAURITIUS / ISLAND</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory nordic-memory reveal" href="分页/nordic.html" aria-label="打开北欧旅行档案">
-        <div class="memory-image" role="img" aria-label="北欧雪山与海岸"></div>
+        <div class="memory-image" data-bg="assets/photos/nordic/0f4a4184f4a092f9ad672f7d5c893054.jpg" role="img" aria-label="北欧雪山与海岸"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Nordic</h2><p>雪线、海风、冰洞和一路向北的光。这一页留给北欧冷而明亮的旅程。</p></div><div class="memory-meta"><span>PHOTO + VIDEO</span><span>NORDIC / NORTH</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory maldives-memory reveal" href="分页/maldives.html" aria-label="打开马尔代夫旅行档案">
-        <div class="memory-image" role="img" aria-label="马尔代夫环礁与泻湖"></div>
+        <div class="memory-image" data-bg="assets/photos/Maldives/4a243c43b2e0bccc3e27ccf9dec47698.jpg" role="img" aria-label="马尔代夫环礁与泻湖"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Maldives</h2><p>珊瑚环礁、浅海和水上屋。这一页留给印度洋上一段低声发亮的旅程。</p></div><div class="memory-meta"><span>PHOTO JOURNAL</span><span>MALDIVES / LAGOON</span><span>OPEN ARCHIVE</span></div></div>
       </a>
 
       <a class="memory next-memory reveal" href="分页/next.html" aria-label="打开下一站预告">
-        <div class="memory-image" role="img" aria-label="夕阳下驶向远方的帆船"></div>
+        <div class="memory-image" data-bg="assets/photos/next/australia-twelve-apostles.jpg" role="img" aria-label="夕阳下驶向远方的帆船"></div>
         <span class="memory-shine" aria-hidden="true"></span>
         <span class="memory-arrow" aria-hidden="true">↗</span>
         <div class="memory-copy"><div><h2>Where will be the next?</h2><p>地图还没有结束。澳洲、美洲、南极洲，下一段旅程会从哪里开始？</p></div><div class="memory-meta"><span>OPEN HORIZON</span><span>AUSTRALIA / AMERICAS / ANTARCTICA</span><span>TO BE CONTINUED</span></div></div>
@@ -318,9 +312,17 @@
     /* 滚动揭示（带错峰延迟） */
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if(entry.isIntersecting){ entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          const image = entry.target.querySelector('.memory-image[data-bg]');
+          if(image && !image.dataset.loaded){
+            image.style.backgroundImage = `url("${image.dataset.bg}")`;
+            image.dataset.loaded = 'true';
+          }
+          observer.unobserve(entry.target);
+        }
       });
-    }, { threshold:.14 });
+    }, { threshold:.14, rootMargin:'320px 0px' });
     document.querySelectorAll('.reveal').forEach((el, i) => { el.style.setProperty('--d', i % 4); observer.observe(el); });
 
     /* 滚动进度条 */
