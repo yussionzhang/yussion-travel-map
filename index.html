@@ -128,13 +128,13 @@
     .maps-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:26px}
     .maps-head h2{margin:10px 0 0;font-size:clamp(28px,3.6vw,48px);letter-spacing:-.025em;line-height:1.15;font-weight:700;font-family:var(--display)}
     .map-meta{font:11px/1.3 var(--mono);letter-spacing:.13em;color:var(--muted)}
-    .map-stack{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+    .map-stack{display:grid;grid-template-columns:1fr;gap:18px}
     .map-panel{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:0 16px 46px rgba(14,23,38,.09);transition:transform .55s var(--ease),box-shadow .55s var(--ease),border-color .55s ease}
     .map-panel:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(14,23,38,.14);border-color:rgba(123,92,255,.4)}
     .map-panel img{display:block;width:100%;height:100%;object-fit:cover}
     .world-panel{min-height:460px}
-    .china-panel{min-height:460px}
-    .china-panel img{object-fit:cover;background:#e9f0ee;object-position:50% 18%;transform:scale(1.32);transform-origin:50% 18%}
+    .china-panel{min-height:500px}
+    .china-panel img{object-fit:cover;background:#e9f0ee;object-position:50% 50%}
     .map-caption{position:absolute;left:0;right:0;bottom:0;padding:25px;display:flex;justify-content:space-between;align-items:end;gap:14px;background:linear-gradient(transparent,rgba(14,23,38,.86) 70%)}
     .map-caption h3{margin:0;font-size:24px;line-height:1.2;letter-spacing:-.02em;color:#fff}
     .map-caption span{font:10px/1.5 var(--mono);letter-spacing:.1em;color:#dfe7ef;text-align:right}
@@ -257,7 +257,7 @@
         <div class="maps-head"><div><h2>足迹，正在延展。</h2></div><span class="map-meta">国家与城市之间</span></div>
         <div class="map-stack">
           <article class="map-panel world-panel"><img src="assets/maps/world-map-visited.png" alt="已到访国家和城市的世界地图"><div class="map-caption"><h3>世界地图</h3><span>COUNTRIES / REGIONS<br>22 PLACES UNLOCKED</span></div></article>
-          <article class="map-panel china-panel"><img src="assets/maps/china-provinces-visited.png" alt="按到访城市和省份标注的中国地图"><div class="map-caption"><h3>国内深度游</h3><span>CHINA / PROVINCIAL<br>CITY ARCHIVE</span></div></article>
+          <article class="map-panel china-panel"><img src="assets/maps/china-provinces-visited-card.png" alt="按到访城市和省份标注的中国地图"><div class="map-caption"><h3>国内深度游</h3><span>CHINA / PROVINCIAL<br>CITY ARCHIVE</span></div></article>
         </div>
       </section>
 
